@@ -329,8 +329,14 @@ static RDebugReasonType r_debug_native_wait(RDebug *dbg, int pid) {
 						if (!r_file_exists (pdb_file + 9)) {
 #else
 				RBinFileOptions opts = { 0 };
-				opts.obj_opts.baseaddr = (uintptr_t)lib->BaseOfDll;
-				RBinFile *bf = r_bin_file_open (core->bin, lib->Path, &opts);
+				opts.baseaddr = (uintptr_t)lib->BaseOfDll;
+				// RBinFile *bf = r_bin_file_open (core->bin, lib->Path, &opts);
+				if (!r_bin_open (core->bin, lib->Path, &opts)) {
+					R_LOG_ERROR ("cannot open file");
+					return R_DEBUG_REASON_ERROR;
+				}
+				// file_new (core->bin, lib->Path, 0, 0, bf->fd, NULL, NULL, false);
+				RBinFile *bf = r_bin_cur (core->bin);
 				if (bf) {
 					const RBinInfo *info = r_bin_get_info (core->bin);
 					if (info && R_STR_ISNOTEMPTY (info->debug_file_name)) {

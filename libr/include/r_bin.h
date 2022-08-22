@@ -681,6 +681,11 @@ R_API bool r_bin_open_io(RBin *bin, RBinFileOptions *opt);
 R_API bool r_bin_open_buf(RBin *bin, RBuffer *buf, RBinFileOptions *opt);
 R_API bool r_bin_reload(RBin *bin, ut32 bf_id, ut64 baseaddr);
 
+#if R2_580
+// uhm should be tied used because we dont want bincur to change because of open
+R_API RBinFile *r_bin_file_open(RBin *bin, const char *file, RBinFileOptions *opt);
+#endif
+
 // plugins/bind functions
 R_API void r_bin_bind(RBin *b, RBinBind *bnd);
 R_API bool r_bin_add(RBin *bin, RBinPlugin *foo);
