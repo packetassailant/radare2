@@ -318,6 +318,7 @@ static RDebugReasonType r_debug_native_wait(RDebug *dbg, int pid) {
 			bool autoload_pdb = dbg->coreb.cfggeti (core, "pdb.autoload");
 			if (autoload_pdb) {
 				PLIB_ITEM lib = r->lib;
+#if 0
 				dbg->coreb.cmdf (core, "\"o \\\"%s\\\" 0x%p\"", lib->Path, lib->BaseOfDll);
 				char *o_res = dbg->coreb.cmdstrf (core, "o~+%s", lib->Name);
 				int fd = atoi (o_res);
@@ -326,6 +327,16 @@ static RDebugReasonType r_debug_native_wait(RDebug *dbg, int pid) {
 					char *pdb_file = dbg->coreb.cmdstr (core, "i~dbg_file");
 					if (pdb_file && (r_str_trim (pdb_file), *pdb_file)) {
 						if (!r_file_exists (pdb_file + 9)) {
+#else
+				RBinFileOptions opts = { 0 };
+				opts.obj_opts.baseaddr = (uintptr_t)lib->BaseOfDll;
+				RBinFile *cur = r_bin_cur (core->bin);
+				RBinFile *bf = r_bin_open (core->bin, lib->Path, &opts);
+				if (bf) {
+					const RBinInfo *info = r_bin_object_get_info (bf->o);
+					if (R_STR_ISNOTEMPTY (info->debug_file_name)) {
+						if (!r_file_exists (info->debug_file_name)) {
+#endif
 							dbg->coreb.cmdf (core, "idpd");
 						}
 						dbg->coreb.cmdf (core, "idp");
