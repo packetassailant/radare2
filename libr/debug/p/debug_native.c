@@ -330,7 +330,7 @@ static RDebugReasonType r_debug_native_wait(RDebug *dbg, int pid) {
 #else
 				RBinFileOptions opts = { 0 };
 				opts.obj_opts.baseaddr = (uintptr_t)lib->BaseOfDll;
-				RBinFile *bf = r_bin_open (core->bin, lib->Path, &opts);
+				RBinFile *bf = r_bin_file_open (core->bin, lib->Path, &opts);
 				if (bf) {
 					const RBinInfo *info = r_bin_object_get_info (bf->o);
 					if (R_STR_ISNOTEMPTY (info->debug_file_name)) {
