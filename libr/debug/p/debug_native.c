@@ -330,7 +330,6 @@ static RDebugReasonType r_debug_native_wait(RDebug *dbg, int pid) {
 #else
 				RBinFileOptions opts = { 0 };
 				opts.obj_opts.baseaddr = (uintptr_t)lib->BaseOfDll;
-				RBinFile *cur = r_bin_cur (core->bin);
 				RBinFile *bf = r_bin_open (core->bin, lib->Path, &opts);
 				if (bf) {
 					const RBinInfo *info = r_bin_object_get_info (bf->o);
@@ -341,13 +340,13 @@ static RDebugReasonType r_debug_native_wait(RDebug *dbg, int pid) {
 						}
 						dbg->coreb.cmdf (core, "idp");
 					}
-					dbg->coreb.cmdf (core, "o-%d", fd);
+					dbg->coreb.cmdf (core, "o-%d", bf->fd);
 				}
 			}
 			r_debug_info_free (r);
 		} else {
-			r_cons_printf ("Loading unknown library.\n");
 			r_cons_flush ();
+			R_LOG_WARN ("Loading unknown library");
 		}
 		restore_thread = true;
 	} else if (reason == R_DEBUG_REASON_EXIT_LIB) {
