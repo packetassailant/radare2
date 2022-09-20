@@ -388,7 +388,7 @@ o
 P- ulumulu
 P+ ulumulu > /dev/null
 PS*~^o
-Px
+Pc
 o--
 o
 Po ulumulu > /dev/null
@@ -796,7 +796,7 @@ e prj.vc=false
 P- hjkl
 P+ hjkl
 Pi~!/
-Px
+Pc
 Pi
 EOF
 EXPECT=<<EOF
