@@ -298,7 +298,7 @@ static void r_core_file_info(RCore *core, PJ *pj, int mode) {
 			}
 			ut64 laddr = r_core_get_cur_laddr (core);
 			if (laddr && laddr != UT64_MAX) {
-				char *laddrs = sdb_itoa (laddr, NULL, 16);
+				char *laddrs = r_str_newf ("0x%08"PFMT64x, laddr);
 				pair ("laddr", laddrs);
 				free (laddrs);
 			}
