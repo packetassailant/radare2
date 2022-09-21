@@ -246,6 +246,10 @@ static void r_core_file_info(RCore *core, PJ *pj, int mode) {
 				pj_ks (pj, "referer", desc->referer);
 			}
 		}
+		ut64 laddr = r_core_get_cur_laddr (core);
+		if (laddr) {
+			pj_kn (pj, "laddr", laddr);
+		}
 		int v = r_anal_archinfo (core->anal, R_ANAL_ARCHINFO_MIN_OP_SIZE);
 		if (v > 0) {
 			pj_ki (pj, "minopsz", v);
@@ -292,6 +296,16 @@ static void r_core_file_info(RCore *core, PJ *pj, int mode) {
 				r_num_units (humansz, sizeof (humansz), fsz);
 				pair ("humansz", humansz);
 			}
+			ut64 laddr = r_core_get_cur_laddr (core);
+			if (laddr && laddr != UT64_MAX) {
+				char *laddrs = sdb_itoa (laddr, NULL, 16);
+				pair ("laddr", laddrs);
+				free (laddrs);
+			}
+		}
+		ut64 laddr = r_core_get_cur_laddr (core);
+		if (laddr) {
+			pair ("laddr", r_strf ("0x%"PFMT64x, laddr));
 		}
 		int v = r_anal_archinfo (core->anal, R_ANAL_ARCHINFO_MIN_OP_SIZE);
 		if (v > 0) {
